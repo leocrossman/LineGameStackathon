@@ -5,6 +5,12 @@ let m, b; // slope and y-intercept
 
 function setup() {
   createCanvas(800, 800);
+
+  // tf.variable allows us to change m and b. Tensors are immutable otherwise
+  // tf.scalar because we are using tensors. `scalar` just means integer.
+  m = tf.variable(tf.scalar(random(1))); // random number between 0 and 1
+  b = tf.variable(tf.scalar(random(1)));
+  console.log(m, b);
 }
 
 function mousePressed() {
