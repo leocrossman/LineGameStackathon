@@ -1,0 +1,23 @@
+{
+  "name": "linegamestackathon",
+  "version": "1.0.0",
+  "description": "- Tensorflow",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leocrossman/LineGameStackathon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leocrossman/LineGameStackathon/issues"
+  },
+  "homepage": "https://github.com/leocrossman/LineGameStackathon#readme",
+  "dependencies": {
+    "socket.io": "^2.1.1"
+  }
+}
