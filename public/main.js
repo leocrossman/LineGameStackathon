@@ -6,6 +6,8 @@ let m, b; // slope and y-intercept
 const learningRate = 0.02; // how quickly the optimizer brings the line to the correct place
 const optimizer = tf.train.sgd(learningRate);
 
+let start = false;
+
 //FOR PLAYER
 let xCoord = 30;
 let yCoord = 40;
@@ -13,7 +15,6 @@ const player = new Player(xCoord, yCoord, 30, 30);
 
 function setup() {
   createCanvas(800, 800);
-
   // tf.variable allows us to change m and b. Tensors are immutable otherwise
   // tf.scalar because we are using tensors. `scalar` just means integer.
   m = tf.variable(tf.scalar(random(1))); // random number between 0 and 1
@@ -54,28 +55,44 @@ function draw() {
     }
   });
   background(0);
-  stroke(255);
-  player.display();
-  strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
-  for (let i = 0; i < xVals.length; i++) {
-    const px = map(xVals[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
-    const py = map(yVals[i], 0, 1, height, 0);
-    point(px, py);
+  if(start === false){
+    stroke(255);
+    fill(255);
+    textAlign(CENTER, CENTER)
+    textSize(40);
+    text('LINE GAME', width/2, height/2 - Math.floor(width/16));
+    textSize(30);
+    text('Press Enter to Start', width/2, height/2 );
   }
+  else{
+    stroke(255);
+    player.display();
+    strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
+    for (let i = 0; i < xs.length; i++) {
+      const px = map(xs[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
+      const py = map(ys[i], 0, 1, height, 0);
+      point(px, py);
+    }
+    let lineX = [0, 1];
+    const ys = tf.tidy(() => predict(lineX)); // clean up memory leak
+    let lineY = ys.dataSync(); // dataSync is an async func so could slow performance but we should be okay...
+    ys.dispose();
 
-  let lineX = [0, 1];
-  const ys = tf.tidy(() => predict(lineX)); // clean up memory leak
-  let lineY = ys.dataSync(); // dataSync is an async func so could slow performance but we should be okay...
-  ys.dispose();
+    // lineX are floats so they can be used in the line func
+    let x1 = map(lineX[0], 0, 1, 0, width);
+    let x2 = map(lineX[1], 0, 1, 0, width);
 
-  // lineX are floats so they can be used in the line func
-  let x1 = map(lineX[0], 0, 1, 0, width);
-  let x2 = map(lineX[1], 0, 1, 0, width);
+    // ys are tensors so we had to get floats from them with dataSync
+    let y1 = map(lineY[0], 0, 1, height, 0);
+    let y2 = map(lineY[1], 0, 1, height, 0);
 
-  // ys are tensors so we had to get floats from them with dataSync
-  let y1 = map(lineY[0], 0, 1, height, 0);
-  let y2 = map(lineY[1], 0, 1, height, 0);
+    strokeWeight(Math.floor(width / 200));
+    line(x1, y1, x2, y2);
+  }
+}
 
-  strokeWeight(Math.floor(width / 200));
-  line(x1, y1, x2, y2);
+function keyPressed(){
+  if(keyCode == ENTER){
+    start = true;
+  }
 }
