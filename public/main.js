@@ -70,6 +70,8 @@ function draw() {
     for (let i = 0; i < xVals.length; i++) {
       const px = map(xVals[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
       const py = map(yVals[i], 0, 1, height, 0);
+      if (xVals.length > 5) xVals.shift();
+      if (yVals.length > 5) yVals.shift();
       point(px, py);
     }
     let lineX = [0, 1];
