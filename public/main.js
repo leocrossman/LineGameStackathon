@@ -15,6 +15,12 @@ function setup() {
   b = tf.variable(tf.scalar(random(1)));
 }
 
+const loss = (pred, label) =>
+  pred
+    .sub(label)
+    .square()
+    .mean();
+
 function mousePressed() {
   const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
   const y = map(mouseY, 0, height, 1, 0);
