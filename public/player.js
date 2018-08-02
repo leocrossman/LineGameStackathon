@@ -35,4 +35,10 @@ class Player{
       this.y = 0-this.h;
     }
   }
+  gameOver(line){
+    if(this.x){
+
+    }
+  }
+
 }
