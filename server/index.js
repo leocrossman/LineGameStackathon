@@ -3,32 +3,32 @@ const express = require('express');
 const morgan = require('morgan');
 const PORT = process.env.PORT || 3000;
 const app = express();
-const socketio = require('socket.io');
+// const socketio = require('socket.io');
+const socket = require('socket.io');
 module.exports = app;
 
 app.use('/api', require('./api'));
 
 const createApp = () => {
+  // start listening (and create a 'server' object representing our server)
+  const server = app.listen(PORT, () =>
+    console.log(`Mixing it up on port ${PORT}`)
+  );
+
   // logging middleware
   app.use(morgan('dev'));
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
 
-  // // any remaining requests with an extension (.js, .css, etc.) send 404
-  // app.use((req, res, next) => {
-  //   if (path.extname(req.path).length) {
-  //     const err = new Error('Not found');
-  //     err.status = 404;
-  //     next(err);
-  //   } else {
-  //     next();
-  //   }
-  // });
-
-  // sends index.html
-  app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public/index.html'));
+  const io = socket(server);
+  io.sockets.on('connection', socket => {
+    console.log(`Lady's and Gentlemen, we got a new client: ${socket.id}`);
   });
+
+  // // sends index.html
+  // app.use('*', (req, res) => {
+  //   res.sendFile(path.join(__dirname, '..', 'public/index.html'));
+  // });
 
   // error handling endware
   app.use((err, req, res, next) => {
@@ -38,20 +38,9 @@ const createApp = () => {
   });
 };
 
-const startListening = () => {
-  // start listening (and create a 'server' object representing our server)
-  const server = app.listen(PORT, () =>
-    console.log(`Mixing it up on port ${PORT}`)
-  );
-
-  // set up our socket control center
-  const io = socketio(server);
-  require('./socket')(io);
-};
-
 async function bootApp() {
   await createApp();
-  await startListening();
+  // await startListening();
 }
 
 // This evaluates as true when this file is run directly from the command line,

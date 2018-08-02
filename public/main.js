@@ -1,3 +1,6 @@
+// const io = require('socket.io-client');
+// import io from 'socket.io-client';
+
 const xVals = [];
 const yVals = [];
 
@@ -13,8 +16,11 @@ let xCoord = 30;
 let yCoord = 40;
 const player = new Player(xCoord, yCoord, 30, 30);
 
+let socket;
+
 function setup() {
   createCanvas(800, 800);
+  socket = io.connect('http://localhost:3000');
   // tf.variable allows us to change m and b. Tensors are immutable otherwise
   // tf.scalar because we are using tensors. `scalar` just means integer.
   m = tf.variable(tf.scalar(random(1))); // random number between 0 and 1
