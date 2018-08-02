@@ -3,7 +3,7 @@ const yVals = [];
 
 let m, b; // slope and y-intercept
 
-const learningRate = 0.02; // how quickly the optimizer brings the line to the correct place
+const learningRate = 0.2; // how quickly the optimizer brings the line to the correct place
 const optimizer = tf.train.sgd(learningRate);
 
 let start = false;
@@ -68,9 +68,9 @@ function draw() {
     stroke(255);
     player.display();
     strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
-    for (let i = 0; i < xs.length; i++) {
-      const px = map(xs[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
-      const py = map(ys[i], 0, 1, height, 0);
+    for (let i = 0; i < xVals.length; i++) {
+      const px = map(xVals[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
+      const py = map(yVals[i], 0, 1, height, 0);
       point(px, py);
     }
     let lineX = [0, 1];
