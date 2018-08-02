@@ -25,6 +25,9 @@
     * Optimizer
       - **Allows** us to minimize the Loss Function via a Learning Rate
 
+    - Train
+      - Minimize the loss function with the optimizer, adjusting m and b based on the loss function
+
   * Process
 
     1.  Get the data.

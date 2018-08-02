@@ -1,5 +1,5 @@
-const xs = [];
-const ys = [];
+const xVals = [];
+const yVals = [];
 
 let m, b; // slope and y-intercept
 
@@ -15,9 +15,9 @@ function setup() {
   b = tf.variable(tf.scalar(random(1)));
 }
 
-// predictions are y-vals from predict func
+// predictions (guesses) are y-vals from predict func
 // labels are actual y values from 'ys'
-// THIS IS OUR MEAN SQUARE ERROR!
+// THIS IS OUR MEAN SQUARE ERROR! (guess - y)^2
 function loss(pred, label) {
   return pred
     .sub(label)
@@ -28,8 +28,8 @@ function loss(pred, label) {
 function mousePressed() {
   const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
   const y = map(mouseY, 0, height, 1, 0);
-  xs.push(x);
-  ys.push(y);
+  xVals.push(x);
+  yVals.push(y);
 }
 
 function predict(x) {
@@ -41,6 +41,9 @@ function predict(x) {
 }
 
 function draw() {
+  const ys = tf.tensor1d(yVals);
+  optimizer.minimize(() => loss(predict(xVals), ys)); // minimize the loss function
+
   background(0);
   stroke(255);
   strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
