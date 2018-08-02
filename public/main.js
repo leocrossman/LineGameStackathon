@@ -3,6 +3,9 @@ const ys = [];
 
 let m, b; // slope and y-intercept
 
+const learningRate = 0.2; // how quickly the optimizer brings the line to the correct place
+const optimizer = tf.train.sgd(learningRate);
+
 function setup() {
   createCanvas(800, 800);
 
@@ -10,7 +13,6 @@ function setup() {
   // tf.scalar because we are using tensors. `scalar` just means integer.
   m = tf.variable(tf.scalar(random(1))); // random number between 0 and 1
   b = tf.variable(tf.scalar(random(1)));
-  console.log(m, b);
 }
 
 function mousePressed() {
@@ -18,6 +20,14 @@ function mousePressed() {
   const y = map(mouseY, 0, height, 1, 0);
   xs.push(x);
   ys.push(y);
+}
+
+function predict(x) {
+  const xs = tf.tensor1d(x);
+  // y = mx + b
+  const ys = tfxs.mul(m).add(b);
+
+  return ys;
 }
 
 function draw() {
