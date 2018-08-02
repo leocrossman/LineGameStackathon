@@ -15,11 +15,15 @@ function setup() {
   b = tf.variable(tf.scalar(random(1)));
 }
 
-const loss = (pred, label) =>
-  pred
+// predictions are y-vals from predict func
+// labels are actual y values from 'ys'
+// THIS IS OUR MEAN SQUARE ERROR!
+function loss(pred, label) {
+  return pred
     .sub(label)
     .square()
     .mean();
+}
 
 function mousePressed() {
   const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
