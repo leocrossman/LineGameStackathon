@@ -3,32 +3,71 @@ const express = require('express');
 const morgan = require('morgan');
 const PORT = process.env.PORT || 3000;
 const app = express();
-const socketio = require('socket.io');
+// const socketio = require('socket.io');
+const socket = require('socket.io');
 module.exports = app;
 
 app.use('/api', require('./api'));
 
+let players = [];
+function Player(id, x, y, w, h){
+  this.id = id;
+  this.y = y;
+  this.x = x;
+  this.w = w;
+  this.h = h;
+}
+
 const createApp = () => {
+  // start listening (and create a 'server' object representing our server)
+  const server = app.listen(PORT, () =>
+    console.log(`Mixing it up on port ${PORT}`)
+  );
+
   // logging middleware
   app.use(morgan('dev'));
 
   app.use(express.static(path.join(__dirname, '..', 'public')));
 
-  // // any remaining requests with an extension (.js, .css, etc.) send 404
-  // app.use((req, res, next) => {
-  //   if (path.extname(req.path).length) {
-  //     const err = new Error('Not found');
-  //     err.status = 404;
-  //     next(err);
-  //   } else {
-  //     next();
-  //   }
-  // });
+  const io = socket(server);
 
-  // sends index.html
-  app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public/index.html'));
+  setInterval(heartbeat, 33);
+  function heartbeat(){
+    io.sockets.emit('heartbeat', players)
+  }
+
+  io.sockets.on('connection', socket => {
+    console.log(`Lady's and Gentlemen, we got a new client: ${socket.id}`);
+
+    socket.on('start', function(data){
+      console.log(socket.id + " " + data.x + " " + data.y);
+      const player = new Player(socket.id, data.x, data.y, data.w, data.h);
+      players.push(player);
+    });
+
+    socket.on('update', function(data){
+      let player;
+      for(let i = 0; i < players.length; i++){
+        if(socket.id === players[i].id){
+          player = players[i];
+        }
+      }
+      player.x = data.x;
+      player.y = data.y;
+      player.w = data.w;
+      player.h = data.h;
+    });
+
+    socket.on('disconnect', () =>{
+      console.log("Client has disconnected");
+    });
+
   });
+
+  // // sends index.html
+  // app.use('*', (req, res) => {
+  //   res.sendFile(path.join(__dirname, '..', 'public/index.html'));
+  // });
 
   // error handling endware
   app.use((err, req, res, next) => {
@@ -38,20 +77,9 @@ const createApp = () => {
   });
 };
 
-const startListening = () => {
-  // start listening (and create a 'server' object representing our server)
-  const server = app.listen(PORT, () =>
-    console.log(`Mixing it up on port ${PORT}`)
-  );
-
-  // set up our socket control center
-  const io = socketio(server);
-  require('./socket')(io);
-};
-
 async function bootApp() {
   await createApp();
-  await startListening();
+  // await startListening();
 }
 
 // This evaluates as true when this file is run directly from the command line,
