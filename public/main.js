@@ -55,22 +55,21 @@ function draw() {
     }
   });
   background(0);
-  if(start === false){
+  if (start === false) {
     stroke(255);
     fill(255);
-    textAlign(CENTER, CENTER)
+    textAlign(CENTER, CENTER);
     textSize(40);
-    text('LINE GAME', width/2, height/2 - Math.floor(width/16));
+    text('LINE GAME', width / 2, height / 2 - Math.floor(width / 16));
     textSize(30);
-    text('Press Enter to Start', width/2, height/2 );
-  }
-  else{
+    text('Press Enter to Start', width / 2, height / 2);
+  } else {
     stroke(255);
     player.display();
     strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
-    for (let i = 0; i < xs.length; i++) {
-      const px = map(xs[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
-      const py = map(ys[i], 0, 1, height, 0);
+    for (let i = 0; i < xVals.length; i++) {
+      const px = map(xVals[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
+      const py = map(yVals[i], 0, 1, height, 0);
       point(px, py);
     }
     let lineX = [0, 1];
@@ -91,8 +90,8 @@ function draw() {
   }
 }
 
-function keyPressed(){
-  if(keyCode == ENTER){
+function keyPressed() {
+  if (keyCode == ENTER) {
     start = true;
   }
 }
