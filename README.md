@@ -26,8 +26,6 @@
       - **Allows** us to minimize the Loss Function via a Learning Rate
       - FROM THE TF DOCS: Executes the loss function and minimizes the scalar output of the loss function by computing gradients of y with respect to the list of trainable variables provided by varList. If no list is provided, it defaults to all trainable variables.
 
-"
-
     - Train
       - Minimize the loss function with the optimizer, adjusting m and b based on the loss function
 
