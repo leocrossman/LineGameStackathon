@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/leocrossman/LineGameStackathon#readme",
   "dependencies": {
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
     "socket.io": "^2.1.1"
   }
 }
