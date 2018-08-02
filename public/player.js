@@ -35,4 +35,35 @@ class Player {
       this.y = 0 - this.h;
     }
   }
+
+  lineCollision(x1, y1, x2, y2, rx1, ry1, rx2, ry2) {
+    const uA =
+      ((rx2 - rx1) * (y1 - ry1) - (ry2 - ry1) * (x1 - rx1)) /
+      ((ry2 - ry1) * (x2 - x1) - (rx2 - rx1) * (y2 - y1));
+    const uB =
+      ((x2 - x1) * (y1 - ry1) - (y2 - y1) * (x1 - rx1)) /
+      ((ry2 - ry1) * (x2 - x1) - (rx2 - rx1) * (y2 - y1));
+
+    if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
+      return true;
+    }
+    return false;
+  }
+
+  gameOver(x1, y1, x2, y2) {
+    const x = this.x;
+    const y = this.y;
+    const w = this.w;
+    const h = this.h;
+
+    const left = this.lineCollision(x1, y1, x2, y2, x, y, x, y + h);
+    const right = this.lineCollision(x1, y1, x2, y2, x + w, y, x + w, y + h);
+    const top = this.lineCollision(x1, y1, x2, y2, x, y, x + w, y);
+    const bottom = this.lineCollision(x1, y1, x2, y2, x, y + h, x + w, y + h);
+
+    if (left || right || top || bottom) {
+      return true;
+    }
+    return false;
+  }
 }

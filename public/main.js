@@ -20,7 +20,11 @@ let socket;
 
 function setup() {
   createCanvas(800, 800);
-  socket = io.connect('http://localhost:3000');
+  // var ipAndPort = location.host; // Get the host name here
+  // if the ip is on localhost, then the host is set to localhost. Otherwise, set it to the ip in the url
+  const ipAndPort =
+    location.host.search(/localhost/) > -1 ? 'localhost:3000' : location.host;
+  socket = io.connect(`http://${ipAndPort}`);
   // tf.variable allows us to change m and b. Tensors are immutable otherwise
   // tf.scalar because we are using tensors. `scalar` just means integer.
   m = tf.variable(tf.scalar(random(1))); // random number between 0 and 1
@@ -94,7 +98,9 @@ function draw() {
     let y2 = map(lineY[1], 0, 1, height, 0);
 
     strokeWeight(Math.floor(width / 200));
-    line(x1, y1, x2, y2);
+    const gameLine = line(x1, y1, x2, y2);
+
+    console.log(player.gameOver(x1, y1, x2, y2));
   }
 }
 
