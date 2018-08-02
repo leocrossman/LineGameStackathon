@@ -35,4 +35,15 @@ class Player {
       this.y = 0 - this.h;
     }
   }
+
+  gameOver(x1, y1, x2, y2) {
+    const d1 = dist(this.x, this.y, x1, y1);
+    const d2 = dist(this.x, this.y, x2, y2);
+    const lineLen = dist(x1, y1, x2, y2);
+    const buffer = 0.1;
+
+    if (d1 + d2 >= lineLen - buffer && d1 + d2 <= lineLen + buffer) {
+      console.log('hi');
+    }
+  }
 }

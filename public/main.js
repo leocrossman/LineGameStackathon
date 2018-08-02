@@ -20,7 +20,10 @@ let socket;
 
 function setup() {
   createCanvas(800, 800);
-  socket = io.connect('http://localhost:3000');
+  var host = window.location.host; // Get the host name here
+  console.log(host);
+  const leoIp = '172.16.23.4';
+  socket = io.connect(`http://localhost:3000`);
   // tf.variable allows us to change m and b. Tensors are immutable otherwise
   // tf.scalar because we are using tensors. `scalar` just means integer.
   m = tf.variable(tf.scalar(random(1))); // random number between 0 and 1
@@ -94,7 +97,9 @@ function draw() {
     let y2 = map(lineY[1], 0, 1, height, 0);
 
     strokeWeight(Math.floor(width / 200));
-    line(x1, y1, x2, y2);
+    const gameLine = line(x1, y1, x2, y2);
+
+    player.gameOver(x1, y1, x2, y2);
   }
 }
 
