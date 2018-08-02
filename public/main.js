@@ -41,11 +41,13 @@ function predict(x) {
 }
 
 function draw() {
-  // Since we made m and b tf.variables, we are able to adjust those tensors
-  if (xVals.length > 0) {
-    const ys = tf.tensor1d(yVals); // transform ys from array to tensor
-    optimizer.minimize(() => loss(predict(xVals), ys)); // minimize the loss function
-  }
+  tf.tidy(() => {
+    // Since we made m and b tf.variables, we are able to adjust those tensors
+    if (xVals.length > 0) {
+      const ys = tf.tensor1d(yVals); // transform ys from array to tensor
+      optimizer.minimize(() => loss(predict(xVals), ys)); // minimize the loss function
+    }
+  });
   background(0);
   stroke(255);
   strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
@@ -55,15 +57,16 @@ function draw() {
     point(px, py);
   }
 
-  let xs = [0, 1];
-  const ys = predict(xs);
-
-  // xs are floats so they can be used in the line func
-  let x1 = map(xs[0], 0, 1, 0, width);
-  let x2 = map(xs[1], 0, 1, 0, width);
-
-  // ys are tensors so we have to get floats from them with dataSync
+  let lineX = [0, 1];
+  const ys = tf.tidy(() => predict(lineX)); // clean up memory leak
   let lineY = ys.dataSync(); // dataSync is an async func so could slow performance but we should be okay...
+  ys.dispose();
+
+  // lineX are floats so they can be used in the line func
+  let x1 = map(lineX[0], 0, 1, 0, width);
+  let x2 = map(lineX[1], 0, 1, 0, width);
+
+  // ys are tensors so we had to get floats from them with dataSync
   let y1 = map(lineY[0], 0, 1, height, 0);
   let y2 = map(lineY[1], 0, 1, height, 0);
 
