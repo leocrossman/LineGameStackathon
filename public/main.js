@@ -6,6 +6,11 @@ let m, b; // slope and y-intercept
 const learningRate = 0.2; // how quickly the optimizer brings the line to the correct place
 const optimizer = tf.train.sgd(learningRate);
 
+//FOR PLAYER
+let xCoord = 30;
+let yCoord = 40;
+const player = new Player(xCoord, yCoord, 30, 30);
+
 function setup() {
   createCanvas(800, 800);
 
@@ -33,6 +38,7 @@ function predict(x) {
 function draw() {
   background(0);
   stroke(255);
+  player.display();
   strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
   for (let i = 0; i < xs.length; i++) {
     const px = map(xs[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
