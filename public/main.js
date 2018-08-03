@@ -1,5 +1,5 @@
-const xVals = [];
-const yVals = [];
+let xVals = [];
+let yVals = [];
 
 let m, b; // slope and y-intercept
 
@@ -11,8 +11,8 @@ let start = false;
 //FOR PLAYER(S)
 let xCoord = 30;
 let yCoord = 40;
-let  player ;
-let players  = [];
+let player;
+let players = [];
 
 let socket;
 
@@ -37,9 +37,13 @@ function setup() {
   };
   socket.emit('start', data);
 
-  socket.on('heartbeat', function(data){
+  socket.on('heartbeat', function(data, newXVals, newYVals) {
     players = data;
-  })
+    // if (newXVals || newYVals) {
+    xVals = newXVals;
+    yVals = newYVals;
+    // }
+  });
 }
 
 function draw() {
@@ -87,8 +91,7 @@ function draw() {
 
     line(x1, y1, x2, y2);
 
-
-    for(let i = players.length -1; i > 0; i--){
+    for (let i = players.length - 1; i > 0; i--) {
       let id = players[i].id;
       if (id.substring(2, id.length) !== socket.id) {
         rect(players[i].x, players[i].y, 30, 30);
@@ -96,7 +99,7 @@ function draw() {
         textSize(4);
       }
     }
-    if(!player.gameOver(x1, y1, x2, y2)){
+    if (!player.gameOver(x1, y1, x2, y2)) {
       player.display();
     }
 
@@ -107,10 +110,8 @@ function draw() {
       w: player.w,
     };
     socket.emit('update', data);
-
   }
 }
-
 
 // predictions (guesses) are y-vals from predict func
 // labels are actual y values from 'ys'
@@ -123,10 +124,18 @@ function loss(pred, label) {
 }
 
 function mousePressed() {
-  const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
-  const y = map(mouseY, 0, height, 1, 0);
-  xVals.push(x);
-  yVals.push(y);
+  if (players[0].id === socket.id) {
+    const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
+    const y = map(mouseY, 0, height, 1, 0);
+    xVals.push(x);
+    yVals.push(y);
+    plotData = {
+      id: players[0].id,
+      xVals,
+      yVals,
+    };
+    socket.emit('plot', plotData);
+  }
 }
 
 function predict(x) {

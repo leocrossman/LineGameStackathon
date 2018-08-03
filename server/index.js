@@ -9,6 +9,8 @@ module.exports = app;
 app.use('/api', require('./api'));
 
 let players = [];
+let newXVals = [];
+let newYVals = [];
 class Player {
   constructor(id, x, y, w, h) {
     this.id = id;
@@ -33,8 +35,8 @@ const createApp = () => {
   const io = socket(server);
 
   setInterval(heartbeat, 20);
-  function heartbeat(){
-    io.sockets.emit('heartbeat', players)
+  function heartbeat() {
+    io.sockets.emit('heartbeat', players, newXVals, newYVals);
   }
 
   io.sockets.on('connection', socket => {
@@ -44,6 +46,14 @@ const createApp = () => {
       console.log(`${socket.id} ${data.x} ${data.y}`);
       const player = new Player(socket.id, data.x, data.y, data.w, data.h);
       players.push(player);
+    });
+
+    socket.on('plot', function(plotData) {
+      console.log(`${socket.id} has plotted a new point!`);
+      if (plotData.xVals.length > 5) plotData.xVals.shift();
+      if (plotData.yVals.length > 5) plotData.yVals.shift();
+      newXVals = [...plotData.xVals];
+      newYVals = [...plotData.yVals];
     });
 
     socket.on('update', data => {
