@@ -33,8 +33,8 @@ const createApp = () => {
   const io = socket(server);
 
   setInterval(heartbeat, 20);
-  function heartbeat(){
-    io.sockets.emit('heartbeat', players)
+  function heartbeat() {
+    io.sockets.emit('heartbeat', players);
   }
 
   io.sockets.on('connection', socket => {
@@ -44,6 +44,11 @@ const createApp = () => {
       console.log(`${socket.id} ${data.x} ${data.y}`);
       const player = new Player(socket.id, data.x, data.y, data.w, data.h);
       players.push(player);
+    });
+
+    socket.on('plot', function(plotData) {
+      console.log(`${socket.id} has plotted a new point!`);
+      console.log('PLOT DATA:', plotData);
     });
 
     socket.on('update', data => {
