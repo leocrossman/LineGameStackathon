@@ -71,6 +71,7 @@ const createApp = () => {
 
     socket.on('disconnect', () => {
       console.log(`Client ${socket.id} has disconnected`);
+      if (socket.id === players[0].id) players.shift();
     });
   });
 
