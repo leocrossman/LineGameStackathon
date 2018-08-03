@@ -14,8 +14,8 @@ let start = false;
 //FOR PLAYER(S)
 let xCoord = 30;
 let yCoord = 40;
-let  player ;
-let players  = [];
+let player;
+let players = [];
 
 let socket;
 
@@ -40,9 +40,9 @@ function setup() {
   };
   socket.emit('start', data);
 
-  socket.on('heartbeat', function(data){
+  socket.on('heartbeat', function(data) {
     players = data;
-  })
+  });
 }
 
 function draw() {
@@ -64,7 +64,6 @@ function draw() {
     text('Press Enter to Start', width / 2, height / 2);
   } else {
     stroke(255);
-
 
     player.display();
 
@@ -102,10 +101,8 @@ function draw() {
     };
 
     socket.emit('update', data);
-
   }
 }
-
 
 // predictions (guesses) are y-vals from predict func
 // labels are actual y values from 'ys'
