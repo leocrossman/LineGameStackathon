@@ -31,7 +31,7 @@ const createApp = () => {
 
   const io = socket(server);
 
-  setInterval(heartbeat, 33);
+  setInterval(heartbeat, 20);
   function heartbeat(){
     io.sockets.emit('heartbeat', players)
   }

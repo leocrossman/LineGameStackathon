@@ -14,8 +14,8 @@ let start = false;
 //FOR PLAYER(S)
 let xCoord = 30;
 let yCoord = 40;
-let player;
-let players = [];
+let  player ;
+let players  = [];
 
 let socket;
 
@@ -40,9 +40,9 @@ function setup() {
   };
   socket.emit('start', data);
 
-  socket.on('heartbeat', function(data) {
+  socket.on('heartbeat', function(data){
     players = data;
-  });
+  })
 }
 
 function draw() {
@@ -64,8 +64,6 @@ function draw() {
     text('Press Enter to Start', width / 2, height / 2);
   } else {
     stroke(255);
-
-    player.display();
 
     strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
     for (let i = 0; i < xVals.length; i++) {
@@ -91,7 +89,20 @@ function draw() {
     strokeWeight(Math.floor(width / 200));
 
     line(x1, y1, x2, y2);
-    player.gameOver(x1, y1, x2, y2);
+
+
+    for(let i = players.length -1; i > 0; i--){
+      let id = players[i].id;
+      if (id.substring(2, id.length) !== socket.id) {
+
+        rect(players[i].x, players[i].y, 30, 30);
+        textAlign(CENTER);
+        textSize(4);
+      }
+    }
+    if(!player.gameOver(x1, y1, x2, y2)){
+      player.display();
+    }
 
     const data = {
       x: player.x,
@@ -99,10 +110,11 @@ function draw() {
       h: player.h,
       w: player.w,
     };
-
     socket.emit('update', data);
+
   }
 }
+
 
 // predictions (guesses) are y-vals from predict func
 // labels are actual y values from 'ys'
