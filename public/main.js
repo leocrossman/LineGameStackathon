@@ -94,7 +94,6 @@ function draw() {
     for(let i = players.length -1; i > 0; i--){
       let id = players[i].id;
       if (id.substring(2, id.length) !== socket.id) {
-
         rect(players[i].x, players[i].y, 30, 30);
         textAlign(CENTER);
         textSize(4);
