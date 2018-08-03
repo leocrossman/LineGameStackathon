@@ -50,6 +50,8 @@ const createApp = () => {
 
     socket.on('plot', function(plotData) {
       console.log(`${socket.id} has plotted a new point!`);
+      if (plotData.xVals.length > 5) plotData.xVals.shift();
+      if (plotData.yVals.length > 5) plotData.yVals.shift();
       newXVals = [...plotData.xVals];
       newYVals = [...plotData.yVals];
     });
