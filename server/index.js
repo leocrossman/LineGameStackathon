@@ -60,7 +60,7 @@ const createApp = () => {
     });
 
     socket.on('disconnect', () => {
-      console.log('Client has disconnected');
+      console.log(`Client ${socket.id} has disconnected`);
     });
   });
 
