@@ -10,12 +10,14 @@ module.exports = app;
 app.use('/api', require('./api'));
 
 let players = [];
-function Player(id, x, y, w, h) {
-  this.id = id;
-  this.y = y;
-  this.x = x;
-  this.w = w;
-  this.h = h;
+class Player {
+  constructor(id, x, y, w, h) {
+    this.id = id;
+    this.y = y;
+    this.x = x;
+    this.w = w;
+    this.h = h;
+  }
 }
 
 const createApp = () => {
