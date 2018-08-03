@@ -1,5 +1,5 @@
-const xVals = [];
-const yVals = [];
+let xVals = [];
+let yVals = [];
 
 let m, b; // slope and y-intercept
 
@@ -37,8 +37,12 @@ function setup() {
   };
   socket.emit('start', data);
 
-  socket.on('heartbeat', function(data) {
+  socket.on('heartbeat', function(data, newXVals, newYVals) {
     players = data;
+    // if (newXVals || newYVals) {
+    xVals = newXVals;
+    yVals = newYVals;
+    // }
   });
 }
 
