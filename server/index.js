@@ -10,7 +10,7 @@ module.exports = app;
 app.use('/api', require('./api'));
 
 let players = [];
-function Player(id, x, y, w, h){
+function Player(id, x, y, w, h) {
   this.id = id;
   this.y = y;
   this.x = x;
@@ -32,23 +32,23 @@ const createApp = () => {
   const io = socket(server);
 
   setInterval(heartbeat, 33);
-  function heartbeat(){
-    io.sockets.emit('heartbeat', players)
+  function heartbeat() {
+    io.sockets.emit('heartbeat', players);
   }
 
   io.sockets.on('connection', socket => {
-    console.log(`Lady's and Gentlemen, we got a new client: ${socket.id}`);
+    console.log(`Ladies and Gentlemen, we got a new client: ${socket.id}`);
 
-    socket.on('start', function(data){
-      console.log(socket.id + " " + data.x + " " + data.y);
+    socket.on('start', function(data) {
+      console.log(`${socket.id} ${data.x} ${data.y}`);
       const player = new Player(socket.id, data.x, data.y, data.w, data.h);
       players.push(player);
     });
 
-    socket.on('update', function(data){
+    socket.on('update', function(data) {
       let player;
-      for(let i = 0; i < players.length; i++){
-        if(socket.id === players[i].id){
+      for (let i = 0; i < players.length; i++) {
+        if (socket.id === players[i].id) {
           player = players[i];
         }
       }
@@ -58,10 +58,9 @@ const createApp = () => {
       player.h = data.h;
     });
 
-    socket.on('disconnect', () =>{
-      console.log("Client has disconnected");
+    socket.on('disconnect', () => {
+      console.log('Client has disconnected');
     });
-
   });
 
   // // sends index.html
