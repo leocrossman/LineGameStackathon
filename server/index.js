@@ -46,7 +46,7 @@ const createApp = () => {
       players.push(player);
     });
 
-    socket.on('update', function(data) {
+    socket.on('update', data => {
       let player;
       for (let i = 0; i < players.length; i++) {
         if (socket.id === players[i].id) {
