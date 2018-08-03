@@ -3,19 +3,20 @@ const express = require('express');
 const morgan = require('morgan');
 const PORT = process.env.PORT || 3000;
 const app = express();
-// const socketio = require('socket.io');
 const socket = require('socket.io');
 module.exports = app;
 
 app.use('/api', require('./api'));
 
 let players = [];
-function Player(id, x, y, w, h){
-  this.id = id;
-  this.y = y;
-  this.x = x;
-  this.w = w;
-  this.h = h;
+class Player {
+  constructor(id, x, y, w, h) {
+    this.id = id;
+    this.y = y;
+    this.x = x;
+    this.w = w;
+    this.h = h;
+  }
 }
 
 const createApp = () => {
@@ -37,18 +38,18 @@ const createApp = () => {
   }
 
   io.sockets.on('connection', socket => {
-    console.log(`Lady's and Gentlemen, we got a new client: ${socket.id}`);
+    console.log(`Ladies and Gentlemen, we got a new client: ${socket.id}`);
 
-    socket.on('start', function(data){
-      console.log(socket.id + " " + data.x + " " + data.y);
+    socket.on('start', function(data) {
+      console.log(`${socket.id} ${data.x} ${data.y}`);
       const player = new Player(socket.id, data.x, data.y, data.w, data.h);
       players.push(player);
     });
 
-    socket.on('update', function(data){
+    socket.on('update', data => {
       let player;
-      for(let i = 0; i < players.length; i++){
-        if(socket.id === players[i].id){
+      for (let i = 0; i < players.length; i++) {
+        if (socket.id === players[i].id) {
           player = players[i];
         }
       }
@@ -58,10 +59,9 @@ const createApp = () => {
       player.h = data.h;
     });
 
-    socket.on('disconnect', () =>{
-      console.log("Client has disconnected");
+    socket.on('disconnect', () => {
+      console.log(`Client ${socket.id} has disconnected`);
     });
-
   });
 
   // // sends index.html
@@ -79,7 +79,6 @@ const createApp = () => {
 
 async function bootApp() {
   await createApp();
-  // await startListening();
 }
 
 // This evaluates as true when this file is run directly from the command line,
