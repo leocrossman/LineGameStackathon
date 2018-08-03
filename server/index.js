@@ -78,7 +78,6 @@ const createApp = () => {
 
 async function bootApp() {
   await createApp();
-  // await startListening();
 }
 
 // This evaluates as true when this file is run directly from the command line,
