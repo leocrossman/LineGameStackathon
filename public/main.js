@@ -6,7 +6,7 @@ let m, b; // slope and y-intercept
 const learningRate = 0.2; // how quickly the optimizer brings the line to the correct place
 const optimizer = tf.train.sgd(learningRate);
 
-let start = false;
+let start = true;
 
 //FOR PLAYER(S)
 let xCoord = 30;
@@ -62,13 +62,12 @@ function draw() {
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(40);
-    text('LINE GAME!', width / 2, height / 2 - Math.floor(width / 16));
+    text('Game Over!', width / 2, height / 2 - Math.floor(width / 16));
     textSize(30);
-    text('Press Enter to Start', width / 2, height / 2);
+    text('Press Enter to play again!', width / 2, height / 2);
   } else {
-    players[0].isAlive = false;
-    // console.log('GAME OVER:', gameOver());
-    if (gameOver()) {
+    if (players[0]) players[0].isAlive = false;
+    if (gameOver() && players[1]) {
       player.reset();
       start = false;
     }
@@ -166,10 +165,8 @@ function keyPressed() {
 }
 
 function gameOver() {
-  console.log(players);
   const isEverybodyDead = players.every(player => {
     return player.isAlive === false && players[1]; // should return true if all dead
   });
-  console.log('ISEVERYBODYDEAD:', isEverybodyDead);
   return isEverybodyDead;
 }
