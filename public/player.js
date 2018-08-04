@@ -51,7 +51,7 @@ class Player {
     return false;
   }
 
-  gameOver(x1, y1, x2, y2) {
+  shouldPlayerDie(x1, y1, x2, y2) {
     const x = this.x;
     const y = this.y;
     const w = this.w;
@@ -65,5 +65,11 @@ class Player {
     if (left || right || top || bottom) {
       this.isAlive = false;
     }
+  }
+
+  reset() {
+    this.x = 30;
+    this.y = 40;
+    this.isAlive = true;
   }
 }

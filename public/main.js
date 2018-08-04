@@ -56,14 +56,22 @@ function draw() {
   });
   background(0);
   if (start === false) {
+    noFill();
+    noStroke();
     stroke(255);
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(40);
-    text('LINE GAME', width / 2, height / 2 - Math.floor(width / 16));
+    text('LINE GAME!', width / 2, height / 2 - Math.floor(width / 16));
     textSize(30);
     text('Press Enter to Start', width / 2, height / 2);
   } else {
+    players[0].isAlive = false;
+    // console.log('GAME OVER:', gameOver());
+    if (gameOver()) {
+      player.reset();
+      start = false;
+    }
     stroke(255);
     strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
     for (let i = 0; i < xVals.length; i++) {
@@ -101,7 +109,7 @@ function draw() {
       }
     }
 
-    player.gameOver(x1, y1, x2, y2); // Checks if player should be dead
+    player.shouldPlayerDie(x1, y1, x2, y2); // Checks if player should be dead
     if (player.isAlive) {
       //checks if player is dead
       player.display();
@@ -155,4 +163,13 @@ function keyPressed() {
   if (keyCode == ENTER) {
     start = true;
   }
+}
+
+function gameOver() {
+  console.log(players);
+  const isEverybodyDead = players.every(player => {
+    return player.isAlive === false && players[1]; // should return true if all dead
+  });
+  console.log('ISEVERYBODYDEAD:', isEverybodyDead);
+  return isEverybodyDead;
 }
