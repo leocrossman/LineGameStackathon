@@ -35,6 +35,7 @@ function setup() {
     h: player.h,
     w: player.w,
     isAlive: player.isAlive,
+    color: [random(50, 255), random(50, 255), random(50, 255)],
   };
   socket.emit('start', data);
 
@@ -93,10 +94,10 @@ function draw() {
       let id = players[i].id;
       if (id.substring(2, id.length) !== socket.id) {
         if (players[i].isAlive) {
+          fill(players[i].color[0], players[i].color[1], players[i].color[2]);
+          stroke(4);
           rect(players[i].x, players[i].y, 30, 30);
         }
-        textAlign(CENTER);
-        textSize(4);
       }
     }
 

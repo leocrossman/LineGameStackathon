@@ -12,13 +12,14 @@ let players = [];
 let newXVals = [];
 let newYVals = [];
 class Player {
-  constructor(id, x, y, w, h, isAlive) {
+  constructor(id, x, y, w, h, isAlive, color) {
     this.id = id;
     this.y = y;
     this.x = x;
     this.w = w;
     this.h = h;
     this.isAlive = isAlive;
+    this.color = color;
   }
 }
 
@@ -51,7 +52,8 @@ const createApp = () => {
         data.y,
         data.w,
         data.h,
-        data.isAlive
+        data.isAlive,
+        data.color
       );
       players.push(player);
     });
