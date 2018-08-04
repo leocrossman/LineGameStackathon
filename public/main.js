@@ -6,7 +6,7 @@ let m, b; // slope and y-intercept
 const learningRate = 0.2; // how quickly the optimizer brings the line to the correct place
 const optimizer = tf.train.sgd(learningRate);
 
-let start = false;
+let start = true;
 
 //FOR PLAYER(S)
 let xCoord = 30;
@@ -56,14 +56,21 @@ function draw() {
   });
   background(0);
   if (start === false) {
+    noFill();
+    noStroke();
     stroke(255);
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(40);
-    text('LINE GAME', width / 2, height / 2 - Math.floor(width / 16));
+    text('Game Over!', width / 2, height / 2 - Math.floor(width / 16));
     textSize(30);
-    text('Press Enter to Start', width / 2, height / 2);
+    text('Press Enter to play again!', width / 2, height / 2);
   } else {
+    if (players[0]) players[0].isAlive = false;
+    if (gameOver() && players[1]) {
+      player.reset();
+      start = false;
+    }
     stroke(255);
     strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
     for (let i = 0; i < xVals.length; i++) {
@@ -101,7 +108,7 @@ function draw() {
       }
     }
 
-    player.gameOver(x1, y1, x2, y2); // Checks if player should be dead
+    player.shouldPlayerDie(x1, y1, x2, y2); // Checks if player should be dead
     if (player.isAlive) {
       //checks if player is dead
       player.display();
@@ -155,4 +162,11 @@ function keyPressed() {
   if (keyCode == ENTER) {
     start = true;
   }
+}
+
+function gameOver() {
+  const isEverybodyDead = players.every(player => {
+    return player.isAlive === false && players[1]; // should return true if all dead
+  });
+  return isEverybodyDead;
 }
