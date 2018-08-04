@@ -12,12 +12,13 @@ let players = [];
 let newXVals = [];
 let newYVals = [];
 class Player {
-  constructor(id, x, y, w, h) {
+  constructor(id, x, y, w, h, isAlive) {
     this.id = id;
     this.y = y;
     this.x = x;
     this.w = w;
     this.h = h;
+    this.isAlive = isAlive;
   }
 }
 
@@ -44,7 +45,14 @@ const createApp = () => {
 
     socket.on('start', function(data) {
       console.log(`${socket.id} ${data.x} ${data.y}`);
-      const player = new Player(socket.id, data.x, data.y, data.w, data.h);
+      const player = new Player(
+        socket.id,
+        data.x,
+        data.y,
+        data.w,
+        data.h,
+        data.isAlive
+      );
       players.push(player);
     });
 
@@ -67,11 +75,17 @@ const createApp = () => {
       player.y = data.y;
       player.w = data.w;
       player.h = data.h;
+      player.isAlive = data.isAlive;
     });
 
     socket.on('disconnect', () => {
       console.log(`Client ${socket.id} has disconnected`);
       if (socket.id === players[0].id) players.shift();
+      else {
+        for (let i = 1; i < players.length; i++) {
+          if (socket.id === players[i].id) players.splice(i, 1);
+        }
+      }
     });
   });
 
