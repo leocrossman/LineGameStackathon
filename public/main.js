@@ -28,21 +28,20 @@ function setup() {
   m = tf.variable(tf.scalar(random(1))); // random number between 0 and 1
   b = tf.variable(tf.scalar(random(1)));
 
-  player = new Player(xCoord, yCoord, 30, 30);
+  player = new Player(xCoord, yCoord, 30, 30, true);
   const data = {
     x: player.x,
     y: player.y,
     h: player.h,
     w: player.w,
+    isAlive: player.isAlive,
   };
   socket.emit('start', data);
 
   socket.on('heartbeat', function(data, newXVals, newYVals) {
     players = data;
-    // if (newXVals || newYVals) {
     xVals = newXVals;
     yVals = newYVals;
-    // }
   });
 }
 
@@ -65,7 +64,6 @@ function draw() {
     text('Press Enter to Start', width / 2, height / 2);
   } else {
     stroke(255);
-
     strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
     for (let i = 0; i < xVals.length; i++) {
       const px = map(xVals[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
@@ -94,12 +92,17 @@ function draw() {
     for (let i = players.length - 1; i > 0; i--) {
       let id = players[i].id;
       if (id.substring(2, id.length) !== socket.id) {
-        rect(players[i].x, players[i].y, 30, 30);
+        if (players[i].isAlive) {
+          rect(players[i].x, players[i].y, 30, 30);
+        }
         textAlign(CENTER);
         textSize(4);
       }
     }
-    if (!player.gameOver(x1, y1, x2, y2)) {
+
+    player.gameOver(x1, y1, x2, y2); // Checks if player should be dead
+    if (player.isAlive) {
+      //checks if player is dead
       player.display();
     }
 
@@ -108,6 +111,7 @@ function draw() {
       y: player.y,
       h: player.h,
       w: player.w,
+      isAlive: player.isAlive,
     };
     socket.emit('update', data);
   }

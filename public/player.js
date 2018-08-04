@@ -1,14 +1,15 @@
 class Player {
-  constructor(x, y, w, h) {
+  constructor(x, y, w, h, isAlive) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
+    this.isAlive = isAlive;
   }
 
   display() {
     fill(255);
-    rect(this.x, this.y, this.w, this.h);
+    // rect(this.x, this.y, this.w, this.h);
     const speed = 3;
     this.offScreen();
 
@@ -62,8 +63,7 @@ class Player {
     const bottom = this.lineCollision(x1, y1, x2, y2, x, y + h, x + w, y + h);
 
     if (left || right || top || bottom) {
-      return true;
+      this.isAlive = false;
     }
-    return false;
   }
 }
