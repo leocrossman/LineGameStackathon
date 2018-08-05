@@ -7,6 +7,7 @@ const learningRate = 0.2; // how quickly the optimizer brings the line to the co
 const optimizer = tf.train.sgd(learningRate);
 
 let start = true;
+let doHeartbeat = true;
 
 //FOR PLAYER(S)
 let xCoord = 30;
@@ -69,6 +70,7 @@ function draw() {
     if (players[0]) players[0].isAlive = false;
     if (gameOver() && players[1]) {
       player.reset();
+      doHeartbeat = false;
       start = false;
     }
     stroke(255);
@@ -136,17 +138,19 @@ function loss(pred, label) {
 }
 
 function mousePressed() {
-  if (players[0].id === socket.id) {
-    const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
-    const y = map(mouseY, 0, height, 1, 0);
-    xVals.push(x);
-    yVals.push(y);
-    plotData = {
-      id: players[0].id,
-      xVals,
-      yVals,
-    };
-    socket.emit('plot', plotData);
+  if (start === true) {
+    if (players[0].id === socket.id) {
+      const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
+      const y = map(mouseY, 0, height, 1, 0);
+      xVals.push(x);
+      yVals.push(y);
+      plotData = {
+        id: players[0].id,
+        xVals,
+        yVals,
+      };
+      socket.emit('plot', plotData);
+    }
   }
 }
 
