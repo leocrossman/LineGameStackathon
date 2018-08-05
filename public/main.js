@@ -88,12 +88,16 @@ function draw() {
     ys.dispose();
 
     // lineX are floats so they can be used in the line func
-    let x1 = map(lineX[0], 0, 1, 0, width);
-    let x2 = map(lineX[1], 0, 1, 0, width);
+    // let x1 = map(lineX[0], 0, 1, 0, width);
+    // let x2 = map(lineX[1], 0, 1, 0, width);
+    let x1 = map(lineX[0], 0.25, 1, 200, width);
+    let x2 = map(lineX[1], 0.25, 1, 200, width);
 
     // ys are tensors so we had to get floats from them with dataSync
-    let y1 = map(lineY[0], 0, 1, height, 0);
-    let y2 = map(lineY[1], 0, 1, height, 0);
+    // let y1 = map(lineY[0], 0, 1, height, 0);
+    // let y2 = map(lineY[1], 0, 1, height, 0);
+    let y1 = map(lineY[0], 0.25, 1, height, 200);
+    let y2 = map(lineY[1], 0.25, 1, height, 200);
 
     strokeWeight(Math.floor(width / 200));
 
@@ -138,18 +142,22 @@ function loss(pred, label) {
 }
 
 function mousePressed() {
-  if (start === true) {
-    if (players[0].id === socket.id) {
-      const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
-      const y = map(mouseY, 0, height, 1, 0);
-      xVals.push(x);
-      yVals.push(y);
-      plotData = {
-        id: players[0].id,
-        xVals,
-        yVals,
-      };
-      socket.emit('plot', plotData);
+  // Only let players plot on the canvas
+  if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+    // Only plot when the game is going
+    if (start === true) {
+      if (players[0].id === socket.id) {
+        const x = map(mouseX, 0, width, 0, 1); // normlaizes our plane to be in the first quadrant instead of just the "width and height"
+        const y = map(mouseY, 0, height, 1, 0);
+        xVals.push(x);
+        yVals.push(y);
+        plotData = {
+          id: players[0].id,
+          xVals,
+          yVals,
+        };
+        socket.emit('plot', plotData);
+      }
     }
   }
 }
