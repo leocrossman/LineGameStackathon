@@ -88,16 +88,12 @@ function draw() {
     ys.dispose();
 
     // lineX are floats so they can be used in the line func
-    // let x1 = map(lineX[0], 0, 1, 0, width);
-    // let x2 = map(lineX[1], 0, 1, 0, width);
-    let x1 = map(lineX[0], 0.25, 1, 200, width);
-    let x2 = map(lineX[1], 0.25, 1, 200, width);
+    let x1 = map(lineX[0], 0, 1, 0, width);
+    let x2 = map(lineX[1], 0, 1, 0, width);
 
     // ys are tensors so we had to get floats from them with dataSync
-    // let y1 = map(lineY[0], 0, 1, height, 0);
-    // let y2 = map(lineY[1], 0, 1, height, 0);
-    let y1 = map(lineY[0], 0.25, 1, height, 200);
-    let y2 = map(lineY[1], 0.25, 1, height, 200);
+    let y1 = map(lineY[0], 0, 1, height, 0);
+    let y2 = map(lineY[1], 0, 1, height, 0);
 
     strokeWeight(Math.floor(width / 200));
 
