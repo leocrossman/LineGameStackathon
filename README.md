@@ -36,3 +36,9 @@
       - Parameters _m_ and _b_ from equation of a line are our parameters that we pass to the loss function that allow us to create the predictions on our line to compare with the actual points from our data.
   3.  Define optimizer.
   4.  **Optimizer minimizes the loss function via the learning rate.**
+
+\*NOTES
+
+- Emit line's position to players, instead of coordinates.
+  - The client would not have had to each make the calculations
+  - The line would be in sync in all instances, thus making the game function as intended.

@@ -10,7 +10,7 @@ class Player {
   display() {
     fill(255);
     // rect(this.x, this.y, this.w, this.h);
-    const speed = 3;
+    const speed = Math.floor(width / 250);
     this.offScreen();
 
     if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) this.x += speed;
