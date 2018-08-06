@@ -41,6 +41,13 @@ const createApp = () => {
     io.sockets.emit('heartbeat', players, newXVals, newYVals);
   }
 
+  let countdown = 5;
+  const interval = setInterval(function() {
+    io.sockets.emit('timer', { countdown: countdown });
+    countdown--;
+    console.log(countdown);
+  }, 1000);
+
   io.sockets.on('connection', socket => {
     console.log(`Ladies and Gentlemen, we got a new client: ${socket.id}`);
 
@@ -56,6 +63,12 @@ const createApp = () => {
         data.color
       );
       players.push(player);
+    });
+
+    socket.on('resetTimer', function() {
+      console.log(interval);
+      clearInterval(interval);
+      io.sockets.emit('timer', { countdown: 5 });
     });
 
     socket.on('plot', function(plotData) {
@@ -90,11 +103,6 @@ const createApp = () => {
       }
     });
   });
-
-  // // sends index.html
-  // app.use('*', (req, res) => {
-  //   res.sendFile(path.join(__dirname, '..', 'public/index.html'));
-  // });
 
   // error handling endware
   app.use((err, req, res, next) => {

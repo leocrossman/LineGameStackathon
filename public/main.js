@@ -3,11 +3,12 @@ let yVals = [];
 
 let m, b; // slope and y-intercept
 
-const learningRate = 0.2; // how quickly the optimizer brings the line to the correct place
+const learningRate = 0.01; // how quickly the optimizer brings the line to the correct place
 const optimizer = tf.train.sgd(learningRate);
 
+let timer;
+
 let start = true;
-let doHeartbeat = true;
 
 //FOR PLAYER(S)
 let xCoord = 30;
@@ -70,10 +71,17 @@ function draw() {
     if (players[0]) players[0].isAlive = false;
     if (gameOver() && players[1]) {
       player.reset();
-      doHeartbeat = false;
       start = false;
+      socket.emit('resetTimer');
     }
     stroke(255);
+    textSize(30);
+    socket.on('timer', function(data) {
+      timer = data.countdown;
+      console.log(timer);
+    });
+    if (timer) text(timer, width - 75, height - 50);
+
     strokeWeight(Math.floor(width / 100)); // Sets the dot sizes to be 1/100th the size of the screen
     for (let i = 0; i < xVals.length; i++) {
       const px = map(xVals[i], 0, 1, 0, width); // maps from our normalized quadrant back to canvas coords
@@ -176,5 +184,5 @@ function gameOver() {
   const isEverybodyDead = players.every(player => {
     return player.isAlive === false && players[1]; // should return true if all dead
   });
-  return isEverybodyDead;
+  return isEverybodyDead || timer <= 0;
 }
