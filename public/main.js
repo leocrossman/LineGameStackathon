@@ -3,11 +3,10 @@ let yVals = [];
 
 let m, b; // slope and y-intercept
 
-const learningRate = 0.2; // how quickly the optimizer brings the line to the correct place
+let learningRate = 0.01; // how quickly the optimizer brings the line to the correct place
 const optimizer = tf.train.sgd(learningRate);
 
 let start = true;
-let doHeartbeat = true;
 
 //FOR PLAYER(S)
 let xCoord = 30;
@@ -70,7 +69,6 @@ function draw() {
     if (players[0]) players[0].isAlive = false;
     if (gameOver() && players[1]) {
       player.reset();
-      doHeartbeat = false;
       start = false;
     }
     stroke(255);

@@ -1,4 +1,4 @@
-# Line Game
+# SmartLine
 
 - Tensorflow
 
