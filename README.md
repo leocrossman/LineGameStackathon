@@ -37,7 +37,7 @@
   3.  Define optimizer.
   4.  **Optimizer minimizes the loss function via the learning rate.**
 
-\*NOTES
+\_NOTES
 
 - Emit line's position to players, instead of coordinates.
   - The client would not have had to each make the calculations
